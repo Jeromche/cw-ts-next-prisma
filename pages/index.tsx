@@ -1,5 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import Timer from '../components/Timer';
 import AuthBanner from '../components/AuthBanner'
 
 const Home: NextPage = () => {
@@ -18,6 +19,7 @@ const Home: NextPage = () => {
 
         <p className='my-3'>
           Track your shifts.
+          <Timer />
         </p>
 
         <AuthBanner />
