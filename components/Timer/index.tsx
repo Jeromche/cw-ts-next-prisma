@@ -6,9 +6,18 @@ const Timer: React.FC = () => {
 
   const [isRunning, setIsRunning] = useState(false);
 
-  const start = () => {
+  const start = async () => {
     console.log('start');
-    setIsRunning(true);
+
+    try {
+      await fetch('/api/shift/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      setIsRunning(true);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   const stop = () => {
