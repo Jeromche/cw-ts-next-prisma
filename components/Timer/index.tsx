@@ -20,9 +20,18 @@ const Timer: React.FC = () => {
     }
   }
 
-  const stop = () => {
+  const stop = async () => {
     console.log('stop');
-    setIsRunning(false);
+
+    try {
+      await fetch('/api/shift/stop', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      setIsRunning(false);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   const toggle = () => {
