@@ -18,5 +18,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     },
   });
 
-  res.json(shift);
+  res.json({ shift });
 };

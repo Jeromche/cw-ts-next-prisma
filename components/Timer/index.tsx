@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react'
+import { timeUnits } from '../../lib/time'
 
 const headers = { 'Content-Type': 'application/json' }
 const fetchInit = { method: 'POST', headers }
 
 const Timer: React.FC = () => {
+  const [time, setTime] = useState({
+    hours: 0,
+    minutes: 0,
+    seconds: 0
+  });
   const [isRunning, setIsRunning] = useState(false);
 
   const start = async () => {
@@ -24,21 +30,26 @@ const Timer: React.FC = () => {
     }
   }
 
-  const toggle = () => {
-    if (isRunning) {
-      stop();
-      return;
-    }
-    start();
-  }
-
   const fetchShift = async () => {
     try {
-      const result = await fetch('/api/shift/active', {
+      const response = await fetch('/api/shift/active', {
         method: 'GET',
         headers
       });
-      console.log({ result })
+
+      const { shift } = await response.json();
+      const creationDate = new Date(shift.createdAt);
+      const creationTime = creationDate.getTime();
+      const currentDate = new Date();
+      const currentTime = currentDate.getTime();
+      const elapsedTime = currentTime - creationTime;
+      const units = timeUnits(elapsedTime)
+
+      setTime({
+        hours: units?.hours || 0,
+        minutes: units?.minutes || 0,
+        seconds: units?.seconds || 0
+      })
     } catch (error) {
       console.error(error);
     }
@@ -50,8 +61,10 @@ const Timer: React.FC = () => {
 
   return (
     <div>
-      <div>00:00</div>
-      <button onClick={toggle}>{isRunning ? 'Stop' : 'Start'} shift</button>
+      <div>{`${time.hours}:${time.minutes}:${time.seconds}`}</div>
+      <button onClick={() => isRunning ? stop() : start()}>
+        {isRunning ? 'Stop' : 'Start'} shift
+      </button>
     </div>
   )
 }
