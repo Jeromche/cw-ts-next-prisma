@@ -30,7 +30,7 @@ const Timer: React.FC = () => {
     }
   }
 
-  const fetchShift = async () => {
+  const fetchActiveShift = async () => {
     try {
       const response = await fetch('/api/shift/active', {
         method: 'GET',
@@ -56,7 +56,7 @@ const Timer: React.FC = () => {
   }
 
   useEffect(() => {
-    fetchShift();
+    fetchActiveShift();
   }, [])
 
   return (
