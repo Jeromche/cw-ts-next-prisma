@@ -17,7 +17,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (activeShift !== null) {
     res.status(400).json({
-      error: "Can't create a shift when shift is already in progress.",
+      error: "Can't create a shift when a shift is already in progress.",
       activeShift,
     });
     return;
