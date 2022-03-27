@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { prisma } from "../../src/prisma";
 
 const Timer: React.FC = () => {
   const [isRunning, setIsRunning] = useState(false);
@@ -36,9 +37,24 @@ const Timer: React.FC = () => {
       stop();
       return;
     }
-
     start();
   }
+
+  const fetchShift = async () => {
+    try {
+      const result = await fetch('/api/shift/active', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      console.log({ result })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchShift();
+  }, [])
 
   return (
     <div>
