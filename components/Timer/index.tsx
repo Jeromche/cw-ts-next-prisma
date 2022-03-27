@@ -1,9 +1,6 @@
 import React, { useState } from 'react'
-// import { useSession } from 'next-auth/react'
 
 const Timer: React.FC = () => {
-  // const { data: session } = useSession()
-
   const [isRunning, setIsRunning] = useState(false);
 
   const start = async () => {
