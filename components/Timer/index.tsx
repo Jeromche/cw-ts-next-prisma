@@ -5,18 +5,18 @@ const headers = { 'Content-Type': 'application/json' }
 const fetchInit = { method: 'POST', headers }
 
 const Timer: React.FC = () => {
-  const [timeFrom, setTimeFrom] = useState<number | null>(null);
+  const [startedAt, setStartedAt] = useState<number | null>(null);
   const [time, setTime] = useState({
     hours: 0,
     minutes: 0,
     seconds: 0
   });
-  const [isRunning, setIsRunning] = useState(false);
 
   const start = async () => {
     try {
-      await fetch('/api/shift/start', fetchInit);
-      setIsRunning(true);
+      const response = await fetch('/api/shift/start', fetchInit);
+      const { createdAt } = await response.json();
+      setStartedAt(createdAt)
     } catch (error) {
       console.error(error);
     }
@@ -25,7 +25,7 @@ const Timer: React.FC = () => {
   const stop = async () => {
     try {
       await fetch('/api/shift/stop', fetchInit);
-      setIsRunning(false);
+      setStartedAt(null);
     } catch (error) {
       console.error(error);
     }
@@ -37,9 +37,11 @@ const Timer: React.FC = () => {
         method: 'GET',
         headers
       });
-      const { shift: { createdAt } } = await response.json();
-      setTimeFrom(createdAt);
-      setIsRunning(true);
+
+      const json = await response.json();
+      if (json.shift === null) return;
+      const { shift: { createdAt } } = json;
+      setStartedAt(createdAt);
     } catch (error) {
       console.error(error);
     }
@@ -49,22 +51,22 @@ const Timer: React.FC = () => {
     fetchActiveShift();
   }, [])
 
+  /**
+   * @todo Stop the interval when stopping as well.
+   */
   useEffect(() => {
-    if (timeFrom === null) return;
+    if (startedAt === null) return;
     const delay = 1000;
     const interval = setInterval(() => {
-      const startTime = new Date(timeFrom).getTime();
+      const startTime = new Date(startedAt).getTime();
       const currentTime = new Date().getTime();
       const units = timeUnits(currentTime - startTime)
       if (units === null) return;
-      setTime({
-        hours: units?.hours,
-        minutes: units?.minutes,
-        seconds: units?.seconds
-      })
+      const { hours, minutes, seconds, ...rest } = units;
+      setTime({ hours, minutes, seconds })
     }, delay)
     return () => clearInterval(interval);
-  }, [timeFrom])
+  }, [startedAt])
 
   return (
     <div>
@@ -73,8 +75,8 @@ const Timer: React.FC = () => {
         {time.minutes < 10 ? `0${time.minutes}` : time.minutes}:
         {time.seconds < 10 ? `0${time.seconds}` : time.seconds}
       </div>
-      <button onClick={() => isRunning ? stop() : start()}>
-        {isRunning ? 'Stop' : 'Start'} shift
+      <button onClick={() => startedAt === null ? start() : stop()}>
+        {startedAt === null ? 'Start' : 'Stop'} shift
       </button>
     </div>
   )

@@ -25,6 +25,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   const result = await prisma.shift.create({
     data: { user: { connect: { id } } },
+    select: { createdAt: true },
   });
 
   res.json(result);
