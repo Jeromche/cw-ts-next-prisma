@@ -18,12 +18,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     },
   });
 
-  if (shift === null) {
-    res.status(400).json({
-      error: "No active shift found.",
-    });
-    return;
-  }
-
   res.json(shift);
 };
