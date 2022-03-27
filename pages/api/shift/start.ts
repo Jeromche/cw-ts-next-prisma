@@ -9,12 +9,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const id = session?.user?.id;
 
   const activeShifts = await prisma.shift.findMany({
-    where: {
-      status: ShiftStatus.ACTIVE,
-    },
-    select: {
-      id: true,
-    },
+    where: { status: ShiftStatus.ACTIVE },
+    select: { id: true },
   });
 
   if (activeShifts.length !== 0) {
