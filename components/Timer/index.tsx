@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { prisma } from "../../src/prisma";
+
+const headers = { 'Content-Type': 'application/json' }
+const fetchInit = { method: 'POST', headers }
 
 const Timer: React.FC = () => {
   const [isRunning, setIsRunning] = useState(false);
 
   const start = async () => {
-    console.log('start');
-
     try {
-      await fetch('/api/shift/start', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      });
+      await fetch('/api/shift/start', fetchInit);
       setIsRunning(true);
     } catch (error) {
       console.error(error);
@@ -19,13 +16,8 @@ const Timer: React.FC = () => {
   }
 
   const stop = async () => {
-    console.log('stop');
-
     try {
-      await fetch('/api/shift/stop', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      });
+      await fetch('/api/shift/stop', fetchInit);
       setIsRunning(false);
     } catch (error) {
       console.error(error);
@@ -43,8 +35,8 @@ const Timer: React.FC = () => {
   const fetchShift = async () => {
     try {
       const result = await fetch('/api/shift/active', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'GET',
+        headers
       });
       console.log({ result })
     } catch (error) {

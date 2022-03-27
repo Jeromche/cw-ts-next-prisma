@@ -12,7 +12,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       userId: id,
       status: ShiftStatus.ACTIVE,
     },
-    select: { id: true },
+    select: {
+      id: true,
+      createdAt: true,
+    },
   });
 
   if (shift === null) {
