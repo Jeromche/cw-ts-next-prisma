@@ -1,14 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { ShiftStatus } from ".prisma/client";
-
 import { getSession } from "next-auth/react";
+import { ShiftStatus } from ".prisma/client";
 import { prisma } from "../../../src/prisma";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getSession({ req });
   const id = session?.user?.id;
 
-  const activeShifts = await prisma.shift.findMany({
+  const activeShift = await prisma.shift.findFirst({
     where: {
       userId: id,
       status: ShiftStatus.ACTIVE,
@@ -16,10 +15,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     select: { id: true },
   });
 
-  if (activeShifts.length !== 0) {
+  if (activeShift !== null) {
     res.status(400).json({
       error: "Can't create a shift when shift is already in progress.",
-      activeShifts,
+      activeShift,
     });
     return;
   }

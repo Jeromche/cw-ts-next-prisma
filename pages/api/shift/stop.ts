@@ -1,30 +1,28 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { ShiftStatus } from ".prisma/client";
-
 import { getSession } from "next-auth/react";
+import { ShiftStatus } from ".prisma/client";
 import { prisma } from "../../../src/prisma";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getSession({ req });
   const id = session?.user?.id;
 
-  const activeShifts = await prisma.shift.findMany({
-    where: { status: ShiftStatus.ACTIVE },
+  const shift = await prisma.shift.findFirst({
+    where: { userId: id, status: ShiftStatus.ACTIVE },
     select: { id: true },
   });
 
-  if (activeShifts.length === 0) {
+  if (shift === null) {
     res.status(400).json({
       error: "There are no active shifts.",
     });
     return;
   }
 
-  const result = activeShifts;
-
-  // const result = await prisma.shift.upd({
-  //   data: { user: { connect: { id } } },
-  // });
+  const result = await prisma.shift.update({
+    where: { id: shift.id },
+    data: { status: ShiftStatus.INACTIVE },
+  });
 
   res.json(result);
 };
