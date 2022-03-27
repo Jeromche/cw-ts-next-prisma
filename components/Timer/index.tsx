@@ -3,8 +3,10 @@ import { timeUnits } from '../../lib/time'
 
 const headers = { 'Content-Type': 'application/json' }
 const fetchInit = { method: 'POST', headers }
+const locations = ['Australia', 'Uruguay', 'Mexico']
 
 const Timer: React.FC = () => {
+  const [location, setLocation] = useState(locations[0])
   const [startedAt, setStartedAt] = useState<number | null>(null);
   const [time, setTime] = useState({
     hours: 0,
@@ -14,7 +16,10 @@ const Timer: React.FC = () => {
 
   const start = async () => {
     try {
-      const response = await fetch('/api/shift/start', fetchInit)
+      const response = await fetch('/api/shift/start', {
+        ...fetchInit,
+        body: JSON.stringify({ location })
+      })
       const { createdAt } = await response.json()
       setStartedAt(createdAt)
     } catch (error) {
@@ -75,6 +80,13 @@ const Timer: React.FC = () => {
         {time.hours < 10 ? `0${time.hours}` : time.hours}:
         {time.minutes < 10 ? `0${time.minutes}` : time.minutes}:
         {time.seconds < 10 ? `0${time.seconds}` : time.seconds}
+      </div>
+      <div>
+        <select onChange={event => setLocation(event.target.value)}>
+          {locations.map(location =>
+            <option value={location} key={location}>{location}</option>
+          )}
+        </select>
       </div>
       <button onClick={() => startedAt === null ? start() : stop()}>
         {startedAt === null ? 'Start' : 'Stop'} shift

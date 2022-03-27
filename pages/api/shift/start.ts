@@ -6,6 +6,7 @@ import { prisma } from '../../../src/prisma'
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getSession({ req })
   const id = session?.user?.id
+  const location: string = req.body.location
 
   const activeShift = await prisma.shift.findFirst({
     where: {
@@ -24,7 +25,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const result = await prisma.shift.create({
-    data: { user: { connect: { id } } },
+    data: {
+      user: { connect: { id } },
+      location,
+    },
     select: { createdAt: true },
   })
 
