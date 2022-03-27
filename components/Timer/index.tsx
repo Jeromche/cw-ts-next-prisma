@@ -10,22 +10,23 @@ const Timer: React.FC = () => {
     hours: 0,
     minutes: 0,
     seconds: 0
-  });
+  })
 
   const start = async () => {
     try {
-      const response = await fetch('/api/shift/start', fetchInit);
-      const { createdAt } = await response.json();
+      const response = await fetch('/api/shift/start', fetchInit)
+      const { createdAt } = await response.json()
       setStartedAt(createdAt)
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
   }
 
   const stop = async () => {
     try {
-      await fetch('/api/shift/stop', fetchInit);
-      setStartedAt(null);
+      await fetch('/api/shift/stop', fetchInit)
+      setStartedAt(null)
+      setTime({ hours: 0, minutes: 0, seconds: 0 })
     } catch (error) {
       console.error(error);
     }
@@ -36,14 +37,14 @@ const Timer: React.FC = () => {
       const response = await fetch('/api/shift/active', {
         method: 'GET',
         headers
-      });
+      })
 
-      const json = await response.json();
-      if (json.shift === null) return;
-      const { shift: { createdAt } } = json;
-      setStartedAt(createdAt);
+      const json = await response.json()
+      if (json.shift === null) return
+      const { shift: { createdAt } } = json
+      setStartedAt(createdAt)
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
   }
 

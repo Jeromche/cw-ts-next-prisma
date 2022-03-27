@@ -3,7 +3,7 @@ import Head from 'next/head'
 import Timer from '../components/Timer';
 import AuthBanner from '../components/AuthBanner'
 
-const Home: NextPage = () => {
+const Home: NextPage = (props) => {
   return (
     <div>
       <Head>
