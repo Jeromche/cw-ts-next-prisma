@@ -5,6 +5,7 @@ const headers = { 'Content-Type': 'application/json' }
 const fetchInit = { method: 'POST', headers }
 
 const Timer: React.FC = () => {
+  const [timeFrom, setTimeFrom] = useState<number | null>(null);
   const [time, setTime] = useState({
     hours: 0,
     minutes: 0,
@@ -36,20 +37,9 @@ const Timer: React.FC = () => {
         method: 'GET',
         headers
       });
-
-      const { shift } = await response.json();
-      const creationDate = new Date(shift.createdAt);
-      const creationTime = creationDate.getTime();
-      const currentDate = new Date();
-      const currentTime = currentDate.getTime();
-      const elapsedTime = currentTime - creationTime;
-      const units = timeUnits(elapsedTime)
-
-      setTime({
-        hours: units?.hours || 0,
-        minutes: units?.minutes || 0,
-        seconds: units?.seconds || 0
-      })
+      const { shift: { createdAt } } = await response.json();
+      setTimeFrom(createdAt);
+      setIsRunning(true);
     } catch (error) {
       console.error(error);
     }
@@ -59,9 +49,30 @@ const Timer: React.FC = () => {
     fetchActiveShift();
   }, [])
 
+  useEffect(() => {
+    if (timeFrom === null) return;
+    const delay = 1000;
+    const interval = setInterval(() => {
+      const startTime = new Date(timeFrom).getTime();
+      const currentTime = new Date().getTime();
+      const units = timeUnits(currentTime - startTime)
+      if (units === null) return;
+      setTime({
+        hours: units?.hours,
+        minutes: units?.minutes,
+        seconds: units?.seconds
+      })
+    }, delay)
+    return () => clearInterval(interval);
+  }, [timeFrom])
+
   return (
     <div>
-      <div>{`${time.hours}:${time.minutes}:${time.seconds}`}</div>
+      <div>
+        {time.hours < 10 ? `0${time.hours}` : time.hours}:
+        {time.minutes < 10 ? `0${time.minutes}` : time.minutes}:
+        {time.seconds < 10 ? `0${time.seconds}` : time.seconds}
+      </div>
       <button onClick={() => isRunning ? stop() : start()}>
         {isRunning ? 'Stop' : 'Start'} shift
       </button>
