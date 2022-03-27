@@ -15,6 +15,12 @@ enum ShiftStatus {
   INACTIVE
 }
 
+enum Location {
+  AUSTRALIA
+  MEXICO
+  URUGUAY
+}
+
 model User {
   id           String  @id @unique @default(uuid())
   email        String  @unique
@@ -26,6 +32,7 @@ model User {
 model Shift {
   id        String      @id @default(uuid())
   userId    String
+  location  Location    @default(AUSTRALIA)
   status    ShiftStatus @default(ACTIVE)
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
