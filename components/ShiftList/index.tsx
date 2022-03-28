@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Shift } from '.prisma/client'
 
-
 type status = 'idle' | 'loading' | 'data' | 'error'
 
 const headers = { 'Content-Type': 'application/json' }
@@ -31,7 +30,7 @@ const ShiftList: React.FC = () => {
     <div>
       <h2>Finished Shifts</h2>
       {status === 'loading' ? (
-        <div>Loading completed shifts.</div>
+        <div>Loading&hellip;</div>
       ) : status === 'data' && (
         <ul>
           {shifts.map(shift => (
