@@ -1,9 +1,10 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Timer from '../components/Timer';
+import ShiftList from '../components/ShiftList';
 import AuthBanner from '../components/AuthBanner'
 
-const Home: NextPage = (props) => {
+const Home: NextPage = () => {
   return (
     <div>
       <Head>
@@ -16,6 +17,7 @@ const Home: NextPage = (props) => {
           Shift App
         </h1>
         <Timer />
+        <ShiftList />
         <AuthBanner />
       </main>
     </div>
