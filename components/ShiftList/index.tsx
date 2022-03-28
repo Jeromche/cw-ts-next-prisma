@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react'
+import { Shift } from '.prisma/client'
+
 
 type status = 'idle' | 'loading' | 'data' | 'error'
 
@@ -7,7 +9,7 @@ const fetchInit = { method: 'GET', headers }
 
 const ShiftList: React.FC = () => {
   const [status, setStatus] = useState<status>('idle')
-  const [shifts, setShifts] = useState([]);
+  const [shifts, setShifts] = useState<Shift[]>([]);
 
   const fetchShifts = async () => {
     setStatus('loading');
@@ -28,6 +30,17 @@ const ShiftList: React.FC = () => {
   return (
     <div>
       <h2>Finished Shifts</h2>
+      {status === 'loading' ? (
+        <div>Loading completed shifts.</div>
+      ) : status === 'data' && (
+        <ul>
+          {shifts.map(shift => (
+            <li>
+              {shift.createdAt} - {shift.updatedAt}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   )
 }
