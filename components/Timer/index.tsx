@@ -64,7 +64,7 @@ const Timer: React.FC = () => {
       const currentTime = new Date().getTime();
       const units = timeUnits(currentTime - startTime)
       if (units === null) return;
-      const { hours, minutes, seconds, ...rest } = units;
+      const { hours, minutes, seconds } = units;
       setTime({ hours, minutes, seconds })
     }, delay)
     return () => clearInterval(interval);
