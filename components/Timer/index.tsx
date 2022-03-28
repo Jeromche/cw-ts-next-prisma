@@ -43,7 +43,6 @@ const Timer: React.FC = () => {
         method: 'GET',
         headers
       })
-
       const json = await response.json()
       if (json.shift === null) return
       const { shift: { createdAt } } = json
@@ -57,9 +56,6 @@ const Timer: React.FC = () => {
     fetchActiveShift();
   }, [])
 
-  /**
-   * @todo Stop the interval when stopping as well.
-   */
   useEffect(() => {
     if (startedAt === null) return;
     const delay = 1000;
