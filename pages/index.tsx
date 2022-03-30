@@ -6,7 +6,6 @@ import Timer from '../components/Timer';
 import ShiftList from '../components/ShiftList';
 import AuthBanner from '../components/AuthBanner'
 
-
 export interface State {
   location: string
   startedAt: number | null
@@ -17,17 +16,18 @@ export interface State {
   }
 }
 
-const Home: NextPage = (props) => {
-  const [state, setState] = useState<State>({
-    location: locations[0],
-    startedAt: null,
-    time: {
-      hours: 0,
-      minutes: 0,
-      seconds: 0
-    }
-  })
+const initialState = {
+  location: locations[0],
+  startedAt: null,
+  time: {
+    hours: 0,
+    minutes: 0,
+    seconds: 0
+  }
+}
 
+const Home: NextPage = () => {
+  const [state, setState] = useState<State>(initialState)
 
   return (
     <div>
