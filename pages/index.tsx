@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import type { NextPage } from 'next'
-import { locations } from '../constants/locations'
 import Head from 'next/head'
 import Timer from '../components/Timer';
 import ShiftList from '../components/ShiftList';
 import AuthBanner from '../components/AuthBanner'
+import { locations } from '../constants/locations'
 
 export interface State {
   location: string
@@ -16,7 +16,7 @@ export interface State {
   }
 }
 
-const initialState = {
+const initialState: State = {
   location: locations[0],
   startedAt: null,
   time: {
@@ -37,9 +37,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className='p-10'>
-        <h1 className='text-2xl font-bold'>
-          Shift App
-        </h1>
+        <h1 className='text-2xl font-bold'>Shift App</h1>
         <Timer state={state} setState={setState} />
         <ShiftList state={state} />
         <AuthBanner />
