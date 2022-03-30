@@ -12,12 +12,12 @@ const ShiftListItem: React.FC<ShiftListItemProps> = ({ shift }) => {
     return date.toLocaleDateString();
   }
 
-  const startDate = formatDate(shift.createdAt);
-  const endDate = formatDate(shift.updatedAt);
   const startTime = new Date(shift.createdAt).getTime();
   const currentTime = new Date(shift.updatedAt).getTime();
   const units = timeUnits(currentTime - startTime)
   const { hours, minutes, seconds } = units;
+  const startDate = formatDate(shift.createdAt);
+  const endDate = formatDate(shift.updatedAt);
 
   return (
     <li>
