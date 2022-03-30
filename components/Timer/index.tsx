@@ -1,27 +1,26 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { timeUnits } from '../../lib/time'
+import { locations } from '../../constants/locations'
+import type { State } from '../../pages/index'
 
 const headers = { 'Content-Type': 'application/json' }
 const fetchInit = { method: 'POST', headers }
-const locations = ['Australia', 'Uruguay', 'Mexico']
 
-const Timer: React.FC = () => {
-  const [location, setLocation] = useState(locations[0])
-  const [startedAt, setStartedAt] = useState<number | null>(null);
-  const [time, setTime] = useState({
-    hours: 0,
-    minutes: 0,
-    seconds: 0
-  })
+interface Props {
+  state: State
+  setState: React.Dispatch<React.SetStateAction<State>>
+}
+
+const Timer: React.FC<Props> = ({ state, setState }) => {
 
   const start = async () => {
     try {
       const response = await fetch('/api/shift/start', {
         ...fetchInit,
-        body: JSON.stringify({ location })
+        body: JSON.stringify({ location: state.location })
       })
       const { createdAt } = await response.json()
-      setStartedAt(createdAt)
+      setState({ ...state, startedAt: createdAt })
     } catch (error) {
       console.error(error)
     }
@@ -30,8 +29,11 @@ const Timer: React.FC = () => {
   const stop = async () => {
     try {
       await fetch('/api/shift/stop', fetchInit)
-      setStartedAt(null)
-      setTime({ hours: 0, minutes: 0, seconds: 0 })
+      setState({
+        ...state,
+        startedAt: null,
+        time: { hours: 0, minutes: 0, seconds: 0 }
+      })
     } catch (error) {
       console.error(error);
     }
@@ -46,7 +48,7 @@ const Timer: React.FC = () => {
       const json = await response.json()
       if (json.shift === null) return
       const { shift: { createdAt } } = json
-      setStartedAt(createdAt)
+      setState({ ...state, startedAt: createdAt })
     } catch (error) {
       console.error(error)
     }
@@ -57,35 +59,39 @@ const Timer: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    if (startedAt === null) return;
+    if (state.startedAt === null) return;
     const delay = 1000;
     const interval = setInterval(() => {
-      const startTime = new Date(startedAt).getTime();
+      if (state.startedAt === null) {
+        clearInterval(interval);
+        return;
+      }
+      const startTime = new Date(state.startedAt).getTime();
       const currentTime = new Date().getTime();
       const units = timeUnits(currentTime - startTime)
       if (units === null) return;
       const { hours, minutes, seconds } = units;
-      setTime({ hours, minutes, seconds })
+      setState({ ...state, time: { hours, minutes, seconds } })
     }, delay)
     return () => clearInterval(interval);
-  }, [startedAt])
+  }, [state.startedAt])
 
   return (
     <div>
       <div>
-        {time.hours < 10 ? `0${time.hours}` : time.hours}:
-        {time.minutes < 10 ? `0${time.minutes}` : time.minutes}:
-        {time.seconds < 10 ? `0${time.seconds}` : time.seconds}
+        {state.time.hours < 10 ? `0${state.time.hours}` : state.time.hours}:
+        {state.time.minutes < 10 ? `0${state.time.minutes}` : state.time.minutes}:
+        {state.time.seconds < 10 ? `0${state.time.seconds}` : state.time.seconds}
       </div>
       <div>
-        <select onChange={event => setLocation(event.target.value)}>
+        <select onChange={event => setState({ ...state, location: event.target.value })}>
           {locations.map(location =>
             <option value={location} key={location}>{location}</option>
           )}
         </select>
       </div>
-      <button onClick={() => startedAt === null ? start() : stop()}>
-        {startedAt === null ? 'Start' : 'Stop'} shift
+      <button onClick={() => state.startedAt === null ? start() : stop()}>
+        {state.startedAt === null ? 'Start' : 'Stop'} shift
       </button>
     </div>
   )

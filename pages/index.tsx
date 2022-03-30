@@ -1,10 +1,34 @@
+import { useState, useEffect } from 'react'
 import type { NextPage } from 'next'
+import { locations } from '../constants/locations'
 import Head from 'next/head'
 import Timer from '../components/Timer';
 import ShiftList from '../components/ShiftList';
 import AuthBanner from '../components/AuthBanner'
 
-const Home: NextPage = () => {
+
+export interface State {
+  location: string
+  startedAt: number | null
+  time: {
+    hours: number
+    minutes: number
+    seconds: number
+  }
+}
+
+const Home: NextPage = (props) => {
+  const [state, setState] = useState<State>({
+    location: locations[0],
+    startedAt: null,
+    time: {
+      hours: 0,
+      minutes: 0,
+      seconds: 0
+    }
+  })
+
+
   return (
     <div>
       <Head>
@@ -16,8 +40,8 @@ const Home: NextPage = () => {
         <h1 className='text-2xl font-bold'>
           Shift App
         </h1>
-        <Timer />
-        <ShiftList />
+        <Timer state={state} setState={setState} />
+        <ShiftList state={state} />
         <AuthBanner />
       </main>
     </div>
