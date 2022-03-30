@@ -9,10 +9,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const location: string = req.body.location
 
   const activeShift = await prisma.shift.findFirst({
-    where: {
-      userId: id,
-      status: ShiftStatus.ACTIVE,
-    },
+    where: { userId: id, status: ShiftStatus.ACTIVE },
     select: { id: true },
   })
 
