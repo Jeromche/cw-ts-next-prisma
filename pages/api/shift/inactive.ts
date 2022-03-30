@@ -12,7 +12,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       status: ShiftStatus.INACTIVE,
     },
     select: {
-      status: true,
       location: true,
       createdAt: true,
       updatedAt: true,
