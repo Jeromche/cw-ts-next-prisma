@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import type { Shift } from '.prisma/client'
-import type { State } from '../../pages/index'
-import Item from './Item'
+import type { State } from '../pages/index'
+import Item from './ShiftListItem'
 
 type status = 'idle' | 'loading' | 'data' | 'error'
 
 interface Props {
   state: State
 }
-
 
 const headers = { 'Content-Type': 'application/json' }
 const fetchInit = { method: 'GET', headers }

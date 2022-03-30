@@ -1,6 +1,6 @@
 import React from 'react'
-import { timeUnits } from '../../lib/time'
 import { Shift } from '.prisma/client'
+import { timeUnits } from '../lib/time'
 
 interface ShiftListItemProps {
   shift: Shift
@@ -14,10 +14,10 @@ const ShiftListItem: React.FC<ShiftListItemProps> = ({ shift }) => {
 
   const startDate = formatDate(shift.createdAt);
   const endDate = formatDate(shift.updatedAt);
-
   const startTime = new Date(shift.createdAt).getTime();
   const currentTime = new Date(shift.updatedAt).getTime();
   const units = timeUnits(currentTime - startTime)
+  const { hours, minutes, seconds } = units;
 
   return (
     <li>
@@ -28,9 +28,9 @@ const ShiftListItem: React.FC<ShiftListItemProps> = ({ shift }) => {
       )}
       {units && (
         <div>
-          {units.hours < 10 ? `0${units.hours}` : units.hours}:
-          {units.minutes < 10 ? `0${units.minutes}` : units.minutes}:
-          {units.seconds < 10 ? `0${units.seconds}` : units.seconds}
+          {hours < 10 ? `0${hours}` : hours}:
+          {minutes < 10 ? `0${minutes}` : minutes}:
+          {seconds < 10 ? `0${seconds}` : seconds}
         </div>
       )}
     </li>

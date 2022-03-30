@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
-import { timeUnits } from '../../lib/time'
-import { locations } from '../../constants/locations'
-import type { State } from '../../pages/index'
+import { timeUnits } from '../lib/time'
+import { locations } from '../constants/locations'
+import type { State } from '../pages/index'
 
 const headers = { 'Content-Type': 'application/json' }
 const fetchInit = { method: 'POST', headers }
@@ -12,7 +12,6 @@ interface Props {
 }
 
 const Timer: React.FC<Props> = ({ state, setState }) => {
-
   const start = async () => {
     try {
       const response = await fetch('/api/shift/start', {
@@ -69,19 +68,20 @@ const Timer: React.FC<Props> = ({ state, setState }) => {
       const startTime = new Date(state.startedAt).getTime();
       const currentTime = new Date().getTime();
       const units = timeUnits(currentTime - startTime)
-      if (units === null) return;
       const { hours, minutes, seconds } = units;
       setState({ ...state, time: { hours, minutes, seconds } })
     }, delay)
     return () => clearInterval(interval);
   }, [state.startedAt])
 
+  const { hours, minutes, seconds } = state.time;
+
   return (
     <div>
       <div>
-        {state.time.hours < 10 ? `0${state.time.hours}` : state.time.hours}:
-        {state.time.minutes < 10 ? `0${state.time.minutes}` : state.time.minutes}:
-        {state.time.seconds < 10 ? `0${state.time.seconds}` : state.time.seconds}
+        {hours < 10 ? `0${hours}` : hours}:
+        {minutes < 10 ? `0${minutes}` : minutes}:
+        {seconds < 10 ? `0${seconds}` : seconds}
       </div>
       <div>
         <select onChange={event => setState({ ...state, location: event.target.value })}>
