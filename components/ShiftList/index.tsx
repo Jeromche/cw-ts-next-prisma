@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Shift } from '.prisma/client'
+import Item from './Item'
 
 type status = 'idle' | 'loading' | 'data' | 'error'
 
@@ -22,6 +23,8 @@ const ShiftList: React.FC = () => {
     }
   }
 
+
+
   useEffect(() => {
     fetchShifts();
   }, [])
@@ -33,10 +36,8 @@ const ShiftList: React.FC = () => {
         <div>Loading&hellip;</div>
       ) : status === 'data' && (
         <ul>
-          {shifts.map(shift => (
-            <li>
-              {shift.createdAt} - {shift.updatedAt}
-            </li>
+          {shifts.map((shift, index) => (
+            <Item shift={shift} key={index} />
           ))}
         </ul>
       )}
