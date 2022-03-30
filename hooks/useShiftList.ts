@@ -31,8 +31,5 @@ export default function useShiftList(state: State): {
     fetchShifts()
   }, [state.startedAt])
 
-  return {
-    status,
-    shifts,
-  }
+  return { status, shifts } as const
 }

@@ -9,14 +9,14 @@ export default function useTimer(
   state: State,
   setState: React.Dispatch<React.SetStateAction<State>>
 ): {
-  start: () => void,
+  start: () => void
   stop: () => void
 } {
   const start = async () => {
     try {
       const response = await fetch('/api/shift/start', {
         ...fetchInit,
-        body: JSON.stringify({ location: state.location })
+        body: JSON.stringify({ location: state.location }),
       })
       const { createdAt } = await response.json()
       setState({ ...state, startedAt: createdAt })
@@ -31,10 +31,10 @@ export default function useTimer(
       setState({
         ...state,
         startedAt: null,
-        time: { hours: 0, minutes: 0, seconds: 0 }
+        time: { hours: 0, minutes: 0, seconds: 0 },
       })
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
   }
 
@@ -42,11 +42,13 @@ export default function useTimer(
     try {
       const response = await fetch('/api/shift/active', {
         method: 'GET',
-        headers
+        headers,
       })
       const json = await response.json()
       if (json.shift === null) return
-      const { shift: { createdAt } } = json
+      const {
+        shift: { createdAt },
+      } = json
       setState({ ...state, startedAt: createdAt })
     } catch (error) {
       console.error(error)
@@ -54,28 +56,25 @@ export default function useTimer(
   }
 
   useEffect(() => {
-    fetchActiveShift();
+    fetchActiveShift()
   }, [])
 
   useEffect(() => {
-    if (state.startedAt === null) return;
-    const delay = 1000;
+    if (state.startedAt === null) return
+    const delay = 1000
     const interval = setInterval(() => {
       if (state.startedAt === null) {
-        clearInterval(interval);
-        return;
+        clearInterval(interval)
+        return
       }
-      const startTime = new Date(state.startedAt).getTime();
-      const currentTime = new Date().getTime();
+      const startTime = new Date(state.startedAt).getTime()
+      const currentTime = new Date().getTime()
       const units = timeUnits(currentTime - startTime)
-      const { hours, minutes, seconds } = units;
+      const { hours, minutes, seconds } = units
       setState({ ...state, time: { hours, minutes, seconds } })
     }, delay)
-    return () => clearInterval(interval);
+    return () => clearInterval(interval)
   }, [state.startedAt])
 
-  return {
-    start,
-    stop
-  } as const
+  return { start, stop } as const
 }
