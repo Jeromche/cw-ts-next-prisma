@@ -20,6 +20,7 @@ export default function useShiftList(state: State): {
       const response = await fetch('/api/shift/inactive', fetchInit)
       const json = await response.json()
       setStatus('data')
+      // @todo would be nice to merge the new shifts with the old.
       setShifts(json.shifts)
     } catch (error) {
       setStatus('error')
