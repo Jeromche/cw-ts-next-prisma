@@ -1,7 +1,8 @@
 import React from 'react'
-import { locations } from '../constants/locations'
-import useTimer from '../hooks/useTimer';
-import type { State } from '../pages/index'
+import { locations } from '../../constants/locations'
+import useTimer from '../../hooks/useTimer';
+import type { State } from '../Shifts'
+import styles from './Timer.module.css'
 
 interface Props {
   state: State
@@ -13,22 +14,24 @@ const Timer: React.FC<Props> = ({ state, setState }) => {
   const { hours, minutes, seconds } = state.time;
 
   return (
-    <div>
-      <div>
+    <div className={styles.container}>
+      <div className={styles.time}>
         {hours < 10 ? `0${hours}` : hours}:
         {minutes < 10 ? `0${minutes}` : minutes}:
         {seconds < 10 ? `0${seconds}` : seconds}
       </div>
-      <div>
+      <div className={styles.location}>
         <select onChange={event => setState({ ...state, location: event.target.value })}>
           {locations.map(location =>
             <option value={location} key={location}>{location}</option>
           )}
         </select>
       </div>
-      <button onClick={() => state.startedAt === null ? start() : stop()}>
-        {state.startedAt === null ? 'Start' : 'Stop'} shift
-      </button>
+      <div className={styles.toggle}>
+        <button onClick={() => state.startedAt === null ? start() : stop()}>
+          {state.startedAt === null ? 'Start' : 'Stop'} shift
+        </button>
+      </div>
     </div>
   )
 }

@@ -5,11 +5,9 @@
   grid-template-areas:
     'location time'
     'date time';
-
   background-color: #eee;
   border-radius: 8px;
   padding: 4px 12px;
-  max-width: 320px;
 }
 
 .location {
@@ -22,7 +20,7 @@
 .date {
   grid-area: date;
   font-size: 14px;
-  color: #666;
+  color: #444;
   display: flex;
   flex-direction: row;
   gap: 1rem;

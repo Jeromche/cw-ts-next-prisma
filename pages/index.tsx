@@ -1,34 +1,9 @@
-import { useState } from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Timer from '../components/Timer';
-import ShiftList from '../components/ShiftList';
+import Shifts from '../components/Shifts'
 import AuthBanner from '../components/AuthBanner'
-import { locations } from '../constants/locations'
 
-export interface State {
-  location: string
-  startedAt: number | null
-  time: {
-    hours: number
-    minutes: number
-    seconds: number
-  }
-}
-
-const initialState: State = {
-  location: locations[0],
-  startedAt: null,
-  time: {
-    hours: 0,
-    minutes: 0,
-    seconds: 0
-  }
-}
-
-const Home: NextPage = () => {
-  const [state, setState] = useState<State>(initialState)
-
+const Home: NextPage = (props) => {
   return (
     <div>
       <Head>
@@ -37,10 +12,11 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className='p-10'>
-        <h1 className='text-2xl font-bold'>Shift App</h1>
-        <Timer state={state} setState={setState} />
-        <ShiftList state={state} />
-        <AuthBanner />
+        {/* <h1 className='text-2xl font-bold'>Shift App</h1> */}
+        <Shifts />
+        <div className="mt-4">
+          <AuthBanner />
+        </div>
       </main>
     </div>
   )
