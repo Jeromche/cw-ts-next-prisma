@@ -1,7 +1,7 @@
 import React from 'react'
 import { locations } from '../constants/locations'
 import useTimer from '../hooks/useTimer';
-import type { State } from '../pages/index'
+import type { State } from './Shifts'
 
 interface Props {
   state: State
@@ -14,7 +14,7 @@ const Timer: React.FC<Props> = ({ state, setState }) => {
 
   return (
     <div>
-      <div>
+      <div data-testid="timer-value">
         {hours < 10 ? `0${hours}` : hours}:
         {minutes < 10 ? `0${minutes}` : minutes}:
         {seconds < 10 ? `0${seconds}` : seconds}
