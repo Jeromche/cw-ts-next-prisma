@@ -1,0 +1,37 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr 10em;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    'location time'
+    'date time';
+
+  background-color: #eee;
+  border-radius: 8px;
+  padding: 4px 12px;
+  max-width: 320px;
+}
+
+.location {
+  grid-area: location;
+  color: #666;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.date {
+  grid-area: date;
+  font-size: 14px;
+  color: #666;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.time {
+  grid-area: time;
+  font-size: 1.5rem;
+  font-weight: 300;
+  align-self: center;
+  text-align: right;
+}
