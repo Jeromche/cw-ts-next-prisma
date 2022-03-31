@@ -3,7 +3,7 @@ import { getSession } from 'next-auth/react'
 import { ShiftStatus } from '.prisma/client'
 import { prisma } from '../../../src/prisma'
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getSession({ req })
   const id = session?.user?.id
   const location: string = req.body.location
@@ -31,3 +31,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   res.json(result)
 }
+
+export default handler
