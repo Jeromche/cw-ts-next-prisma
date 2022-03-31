@@ -16,6 +16,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       createdAt: true,
       updatedAt: true,
     },
+    orderBy: [{ updatedAt: 'desc' }],
   })
   res.json({ shifts })
 }
