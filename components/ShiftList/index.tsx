@@ -15,7 +15,7 @@ const ShiftList: React.FC<Props> = ({ state }) => {
     <div>
       <h2 className='text-1.5xl font-bold mb-2'>Finished Shifts</h2>
       {status === 'loading' && shifts.length === 0 ? (
-        <div>Loading&hellip;</div>
+        <div>Loading previous shifts&hellip;</div>
       ) : status === 'data' && (
         <ul className={styles.list}>
           {shifts.map((shift, index) => (

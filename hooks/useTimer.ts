@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { timeUnits } from '../lib/time'
-import type { State } from '../pages/index'
+import type { State } from '../components/Shifts'
 
 const headers = { 'Content-Type': 'application/json' }
 const fetchInit = { method: 'POST', headers }
