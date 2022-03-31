@@ -1,5 +1,5 @@
 import React from 'react'
-import type { State } from '../pages/index'
+import type { State } from './Shifts'
 import useShiftList from '../hooks/useShiftList'
 import Item from './ShiftListItem'
 
