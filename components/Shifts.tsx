@@ -29,7 +29,7 @@ const Shifts: React.FC = () => {
   return (
     <>
       <Timer state={state} setState={setState} />
-      {/* <ShiftList state={state} /> */}
+      <ShiftList state={state} />
     </>
   )
 }
