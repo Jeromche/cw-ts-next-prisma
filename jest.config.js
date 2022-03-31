@@ -9,7 +9,7 @@ const createJestConfig = nextJest({
 const customJestConfig = {
   setupFilesAfterEnv: [
     '<rootDir>/jest.setup.js',
-    '<rootDir>/__mocks__/fetch.js',
+    // '<rootDir>/__mocks__/fetch.js',
   ],
   resetMocks: true,
   // Add more setup options before each test is run
@@ -20,11 +20,4 @@ const customJestConfig = {
 }
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
-const nextJest = createJestConfig(customJestConfig)
-
-/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
-module.exports = {
-  preset: 'ts-jest',
-  testEnvironment: 'node',
-  ...nextJest,
-}
+module.exports = createJestConfig(customJestConfig)

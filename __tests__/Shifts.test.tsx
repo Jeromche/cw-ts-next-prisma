@@ -1,8 +1,9 @@
 import { render, screen } from '@testing-library/react'
+import mockFetchPromise from '../jest/fetch'
 import Shifts from '../components/Shifts'
 import "@testing-library/jest-dom";
 
-jest.mock('next-auth/react', () => {
+function mockNextAuth() {
   const originalModule = jest.requireActual('next-auth/react')
   const mockSession = {
     expires: new Date(Date.now() + 2 * 86400).toISOString(),
@@ -18,7 +19,11 @@ jest.mock('next-auth/react', () => {
       }
     }),
   }
-})
+}
+
+// Mock fetch and useSession.
+global.fetch = jest.fn().mockImplementation(() => mockFetchPromise)
+jest.mock('next-auth/react', mockNextAuth)
 
 describe('Shifts App', () => {
   it('renders a timer at 00:00:00 on first load', () => {
