@@ -1,4 +1,5 @@
 import React from 'react'
+import classnames from 'classnames';
 import { locations } from '../../constants/locations'
 import useTimer from '../../hooks/useTimer';
 import type { State } from '../Shifts'
@@ -27,7 +28,10 @@ const Timer: React.FC<Props> = ({ state, setState }) => {
           )}
         </select>
       </div>
-      <div className={styles.toggle}>
+      <div className={classnames({
+        [styles.toggle]: true,
+        [styles.toggleActive]: state.startedAt !== null
+      })}>
         <button onClick={() => state.startedAt === null ? start() : stop()}>
           {state.startedAt === null ? 'Start' : 'Stop'} shift
         </button>
