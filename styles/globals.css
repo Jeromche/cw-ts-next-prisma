@@ -8,6 +8,10 @@ body {
   justify-content: center;
 }
 
+main {
+  padding: 32px clamp(32px, 5vw, 50px);
+}
+
 @media (min-width: 768px) {
   body {
     justify-content: flex-start;
