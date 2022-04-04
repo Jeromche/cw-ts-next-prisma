@@ -5,15 +5,19 @@
  * @todo Define return value with Typescript
  * @link  https://stackoverflow.com/a/68673714
  */
-export function timeUnits(ms: number) {
-  let remainder: number = ms
+export function timeUnits(ms: number): {
+  hours: number
+  minutes: number
+  seconds: number
+} {
+  let remainder = ms
 
   /**
    * Takes as many whole units from the time pool (ms) as possible
    * @param {int} msUnit - Size of a single unit in milliseconds
    * @return {int} Number of units taken from the time pool
    */
-  const allocate = (msUnit: number) => {
+  const allocate = (msUnit: number): number => {
     const units = Math.trunc(remainder / msUnit)
     remainder -= units * msUnit
     return units
