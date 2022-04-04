@@ -12,5 +12,4 @@ const Shifts: React.FC = () => (
   </ShiftProvider>
 )
 
-
 export default Shifts
