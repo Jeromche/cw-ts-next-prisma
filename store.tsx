@@ -26,7 +26,6 @@ const initialTimerState: Timer = {
 }
 
 const headers = { 'Content-Type': 'application/json' }
-const fetchInit = { method: 'GET', headers }
 
 const useShifts = () => {
   const [timer, setTimer] = useState<Timer>(initialTimerState)
@@ -36,7 +35,8 @@ const useShifts = () => {
 
   const startTimer = async () => {
     const response = await fetch('/api/shift/start', {
-      ...{ ...fetchInit, method: 'POST' },
+      method: 'POST',
+      headers,
       body: JSON.stringify({ location: timer.location }),
     })
     const { createdAt } = await response.json()
@@ -52,7 +52,7 @@ const useShifts = () => {
   }
 
   const stopTimer = async () => {
-    const response = await fetch('/api/shift/stop', fetchInit)
+    const response = await fetch('/api/shift/stop', { method: 'POST', headers })
     const shift = await response.json();
 
     resetTimer();
@@ -89,7 +89,7 @@ const useShifts = () => {
   }
 
   const fetchInactiveShifts = async () => {
-    const response = await fetch('/api/shift/inactive', fetchInit)
+    const response = await fetch('/api/shift/inactive', { method: 'GET', headers })
     const json = await response.json()
 
     setShifts(json.shifts)
@@ -111,11 +111,10 @@ const useShifts = () => {
   }
 }
 
-const ShiftContext = createContext<ReturnType<typeof useShifts> | null>(
-  null
-);
+const ShiftContext = createContext<ReturnType<typeof useShifts> | null>(null);
 
 export const useShiftContext = () => useContext(ShiftContext)!;
+
 export function ShiftProvider({ children }: { children: React.ReactNode }) {
   return (
     <ShiftContext.Provider value={useShifts()}>{children}</ShiftContext.Provider>
