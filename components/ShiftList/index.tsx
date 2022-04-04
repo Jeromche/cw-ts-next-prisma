@@ -1,22 +1,32 @@
-import React from 'react'
-import type { State } from '../../pages/index'
-import useShiftList from '../../hooks/useShiftList'
+import React, { useEffect, useState } from 'react'
+import { useShiftContext } from "../../store";
 import Item from './../ShiftListItem'
 import styles from './ShiftList.module.css'
 
-interface Props {
-  state: State
-}
+const ShiftList: React.FC = () => {
+  const {
+    shifts,
+    fetchInactiveShifts,
+  } = useShiftContext();
 
-const ShiftList: React.FC<Props> = ({ state }) => {
-  const { status, shifts } = useShiftList(state)
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchShifts = async () => {
+    setIsLoading(true);
+    await fetchInactiveShifts();
+    setIsLoading(false)
+  }
+
+  useEffect(() => {
+    fetchShifts()
+  }, [])
 
   return (
-    <div>
+    <div className={styles.container}>
       <h2 className='text-1.5xl font-bold mb-2'>Finished Shifts</h2>
-      {status === 'loading' && shifts.length === 0 ? (
+      {isLoading && shifts.length === 0 ? (
         <div>Loading previous shifts&hellip;</div>
-      ) : status === 'data' && (
+      ) : (
         <ul className={styles.list}>
           {shifts.map((shift, index) => (
             <Item shift={shift} key={index} />

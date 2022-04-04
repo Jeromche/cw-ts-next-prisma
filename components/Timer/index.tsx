@@ -1,18 +1,29 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import classnames from 'classnames';
-import { locations } from '../../constants/locations'
-import useTimer from '../../hooks/useTimer';
-import type { State } from '../Shifts'
+import { useShiftContext } from "../../store";
 import styles from './Timer.module.css'
 
-interface Props {
-  state: State
-  setState: React.Dispatch<React.SetStateAction<State>>
-}
+const Timer: React.FC = () => {
+  const {
+    timer,
+    startTicking,
+    locations,
+    setLocation,
+    startTimer,
+    stopTimer,
+    fetchActiveShift
+  } = useShiftContext();
 
-const Timer: React.FC<Props> = ({ state, setState }) => {
-  const { start, stop } = useTimer(state, setState)
-  const { hours, minutes, seconds } = state.time;
+  const { hours, minutes, seconds } = timer.time;
+
+  useEffect(() => {
+    fetchActiveShift();
+  }, [])
+
+  useEffect(() => {
+    if (timer.startedAt === null) return
+    return startTicking();
+  }, [timer.startedAt])
 
   return (
     <div className={styles.container}>
@@ -22,7 +33,7 @@ const Timer: React.FC<Props> = ({ state, setState }) => {
         {seconds < 10 ? `0${seconds}` : seconds}
       </div>
       <div className={styles.location}>
-        <select onChange={event => setState({ ...state, location: event.target.value })}>
+        <select onChange={event => setLocation(event.target.value)}>
           {locations.map(location =>
             <option value={location} key={location}>{location}</option>
           )}
@@ -30,10 +41,10 @@ const Timer: React.FC<Props> = ({ state, setState }) => {
       </div>
       <div className={classnames({
         [styles.toggle]: true,
-        [styles.toggleActive]: state.startedAt !== null
+        [styles.toggleActive]: timer.startedAt !== null
       })}>
-        <button onClick={() => state.startedAt === null ? start() : stop()}>
-          {state.startedAt === null ? 'Start' : 'Stop'} shift
+        <button onClick={() => timer.startedAt === null ? startTimer() : stopTimer()}>
+          {timer.startedAt === null ? 'Start' : 'Stop'} shift
         </button>
       </div>
     </div>
