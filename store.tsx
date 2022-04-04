@@ -25,7 +25,6 @@ const initialTimerState: Timer = {
   },
 }
 
-// Used by `fetch()`
 const headers = { 'Content-Type': 'application/json' }
 const fetchInit = { method: 'GET', headers }
 
