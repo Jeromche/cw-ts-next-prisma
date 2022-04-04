@@ -4,4 +4,12 @@
 
 body {
   font-family: 'Raleway', sans-serif;
+  display: flex;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  body {
+    justify-content: flex-start;
+  }
 }
